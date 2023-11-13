@@ -43,6 +43,7 @@ if __name__=="__main__":
 
             if epoch % 5 == 0 and step == 0:
                 print(f"Epoch {epoch} | step {step:03d} Loss: {loss.item()} ")
-                plot_denoising(model, IMG_SIZE, MAX_TIMESTEP, DEVICE)
+                plot_denoising(model, IMG_SIZE, MAX_TIMESTEP, f"./results/figures/figure{epoch}.png", DEVICE)
 
-        torch.save(model.state_dict(), f"models/model{epoch}.pth")
+        if epoch % 5 == 0:
+            torch.save(model.state_dict(), f"./results/models/model{epoch}.pth")

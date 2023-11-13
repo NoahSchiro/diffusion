@@ -11,6 +11,6 @@ STATS        = (0.5229942, 0.48899996, 0.41180329), (0.25899375, 0.24669976, 0.2
 device = "cuda"
 
 model = SimpleUnet().to(torch.device(device))
-model.load_state_dict(torch.load("./models/model99.pth"))
+model.load_state_dict(torch.load("./results/models/model4.pth"))
 
-plot_denoising(model, MAX_TIMESTEP, IMG_SIZE, "cuda")
+plot_denoising(model, IMG_SIZE, MAX_TIMESTEP, f"./out.png", device)

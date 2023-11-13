@@ -45,7 +45,7 @@ def load_transformed_dataset(size, stats):
         T.Normalize(*stats)
     ])
 
-    return ImageFolder("../data", transform)
+    return ImageFolder("./data", transform)
 
 def show_tensor_image(image):
     reverse_transforms = transforms.Compose(
@@ -65,7 +65,7 @@ def show_tensor_image(image):
 
 
 @torch.no_grad()
-def plot_denoising(model, img_size, max_timestep, device="cpu"):
+def plot_denoising(model, img_size, max_timestep, save_file, device="cpu"):
     # Sample noise
     img = torch.randn((1, 3, img_size, img_size), device=device)
     plt.figure(figsize=(15, 15))
@@ -87,35 +87,4 @@ def plot_denoising(model, img_size, max_timestep, device="cpu"):
             ax.set_title(f"t={time_val}")
             show_tensor_image(img.detach().cpu())
             subplot_idx += 1
-    plt.show(block=False)
-
-
-def show_images(dataset, num_samples=20):
-    """Plots some samples from the dataset"""
-    plt.figure(figsize=(15, 15))
-    plt.title(f"First {num_samples} images in the dataset")
-    plt.axis("off")
-    subplot_dim = math.ceil(math.sqrt(num_samples))
-    for i, img in enumerate(dataset):
-        if i == num_samples:
-            break
-        plt.subplot(subplot_dim, subplot_dim, i + 1)
-        plt.imshow(img)
-
-
-def plot_diffusion(dataloader, max_timestep):
-    # Simulate forward diffusion
-    image = next(iter(dataloader))[0]
-
-    plt.figure(figsize=(15, 15))
-    plt.axis("off")
-    plt.title("Noise process for increasing time t", y=1.08)
-    num_images = 9
-    subplot_dim = math.ceil(math.sqrt(num_images))
-
-    for idx, time_val in enumerate(np.floor(np.linspace(0, max_timestep - 1, num_images))):
-        t = torch.Tensor([time_val]).type(torch.int64)
-        ax = plt.subplot(subplot_dim, subplot_dim, idx + 1)
-        ax.set_title(f"t={time_val}")
-        img, _ = forward_diffusion_sample(image, t)
-        show_tensor_image(img)
+    plt.savefig(save_file)
